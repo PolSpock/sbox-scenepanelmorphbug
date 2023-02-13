@@ -1,0 +1,19 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Sandbox
+@inherits RootPanel
+
+<root>
+    <TestScene></TestScene>
+</root>
+
+@code
+{
+    public static Hud Current { get; private set; }
+
+    protected override void OnParametersSet()
+    {
+        Current = this;
+    }
+}

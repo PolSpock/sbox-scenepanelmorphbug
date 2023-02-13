@@ -1,0 +1,60 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Sandbox
+@inherits Panel
+
+@attribute [StyleSheet("/TestScene.scss")]
+
+<root>
+	<scene @ref=WorldScene></scene>
+</root>
+
+@code {
+	public ScenePanel WorldScene { get; set; }
+	public SceneWorld MenuWorld { get; set; }
+
+	private SceneModel AvatarModel;
+
+	public override void OnHotloaded()
+	{
+		RefreshWorld();
+	}
+
+	protected override void OnAfterTreeRender(bool firstTime)
+	{
+		base.OnAfterTreeRender(firstTime);
+
+		if (firstTime)
+		{
+			RefreshWorld();
+		}
+	}
+
+	void RefreshWorld()
+	{
+		// Cleanup
+		MenuWorld?.Delete();
+
+		MenuWorld = new SceneWorld();
+
+		AvatarModel = new SceneModel(MenuWorld, "models/citizen/citizen.vmdl", Transform.Zero);
+		AvatarModel.Morphs.Set("LipSidewaysL", 1.0f);
+
+		foreach (var sceneObject in MenuWorld.SceneObjects)
+		{
+			// BUGGED MORPHS
+			(sceneObject as SceneModel).Update(1f);
+		}
+
+		Angles angles = new(15f, 157.5f, 0);
+		Vector3 position = Vector3.Up * 45f + angles.Forward * -60f;
+
+		WorldScene.World = MenuWorld;
+		WorldScene.Camera.Position = position;
+		WorldScene.Camera.Rotation = Rotation.From(angles);
+		WorldScene.Camera.FieldOfView = 80;
+		WorldScene.Camera.AmbientLightColor = Color.White;
+		WorldScene.Camera.Name = "MenuWorld";
+	}
+}

@@ -1,0 +1,10 @@
+﻿TestScene {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+
+    & scene {
+        position: relative;
+        flex-grow: 1;
+    }
+}
